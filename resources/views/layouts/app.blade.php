@@ -4,6 +4,22 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="{{ asset('images/logo.png') }}" type="image/png">
+    
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{ url('/') }}" />
+    <meta property="og:title" content="@yield('title', 'TESLA - Invest. Trade. Drive.')" />
+    <meta property="og:description" content="All-in-one platform for crypto wallet funding, automated investments, live stocks, and premium EV inventory." />
+    <meta property="og:image" content="{{ asset('images/logo.png') }}" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="{{ url('/') }}" />
+    <meta property="twitter:title" content="@yield('title', 'TESLA - Invest. Trade. Drive.')" />
+    <meta property="twitter:description" content="All-in-one platform for crypto wallet funding, automated investments, live stocks, and premium EV inventory." />
+    <meta property="twitter:image" content="{{ asset('images/logo.png') }}" />
+
     <title>@yield('title', 'TESLA - Invest. Trade. Drive.')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
