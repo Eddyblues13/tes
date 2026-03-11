@@ -242,10 +242,7 @@ class DashboardController extends Controller
     public function storeUser(Request $request)
     {
         $validated = $request->validate([
-            'first_name' => 'nullable|string|max:255',
-            'last_name' => 'nullable|string|max:255',
             'name' => 'required|string|max:255',
-            'username' => 'nullable|string|max:255|unique:users,username',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
             'available_balance' => 'nullable|numeric|min:0',
@@ -273,10 +270,7 @@ class DashboardController extends Controller
     public function updateUser(Request $request, User $user)
     {
         $validated = $request->validate([
-            'first_name' => 'nullable|string|max:255',
-            'last_name' => 'nullable|string|max:255',
             'name' => 'required|string|max:255',
-            'username' => 'nullable|string|max:255|unique:users,username,' . $user->id,
             'email' => 'required|email|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
             'available_balance' => 'nullable|numeric|min:0',

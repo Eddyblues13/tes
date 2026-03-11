@@ -66,13 +66,13 @@
                             <td style="padding: 12px 14px;">
                                 <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                                     @if($submission->id_document_path)
-                                        <a href="{{ asset('storage/' . $submission->id_document_path) }}" target="_blank" style="font-size: 10px; padding: 4px 8px; border-radius: 6px; background: #eff6ff; color: #2563eb; text-decoration: none; font-weight: 700;">ID</a>
+                                        <a href="{{ route('admin.kyc.file', ['path' => $submission->id_document_path]) }}" target="_blank" style="font-size: 10px; padding: 4px 8px; border-radius: 6px; background: #eff6ff; color: #2563eb; text-decoration: none; font-weight: 700;">ID</a>
                                     @endif
                                     @if($submission->proof_of_address_path)
-                                        <a href="{{ asset('storage/' . $submission->proof_of_address_path) }}" target="_blank" style="font-size: 10px; padding: 4px 8px; border-radius: 6px; background: #f0fdf4; color: #16a34a; text-decoration: none; font-weight: 700;">Address</a>
+                                        <a href="{{ route('admin.kyc.file', ['path' => $submission->proof_of_address_path]) }}" target="_blank" style="font-size: 10px; padding: 4px 8px; border-radius: 6px; background: #f0fdf4; color: #16a34a; text-decoration: none; font-weight: 700;">Address</a>
                                     @endif
                                     @if($submission->selfie_path)
-                                        <a href="{{ asset('storage/' . $submission->selfie_path) }}" target="_blank" style="font-size: 10px; padding: 4px 8px; border-radius: 6px; background: #fef3c7; color: #d97706; text-decoration: none; font-weight: 700;">Selfie</a>
+                                        <a href="{{ route('admin.kyc.file', ['path' => $submission->selfie_path]) }}" target="_blank" style="font-size: 10px; padding: 4px 8px; border-radius: 6px; background: #fef3c7; color: #d97706; text-decoration: none; font-weight: 700;">Selfie</a>
                                     @endif
                                 </div>
                             </td>
