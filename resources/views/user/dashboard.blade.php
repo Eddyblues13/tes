@@ -21,7 +21,7 @@
     }
     #dashboard .dashboard-charts-grid {
         display: grid;
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 14px;
         margin-top: 16px;
     }
@@ -336,6 +336,55 @@
                             <canvas id="chartInvestments"></canvas>
                         </div>
                     </div>
+                    <!-- Stocks Chart -->
+                    <div class="dashboard-chart-card">
+                        <div class="chart-header">
+                            <h4>Stock Overview</h4>
+                            <span class="chart-live-badge">
+                                <span style="width: 6px; height: 6px; background: #10b981; border-radius: 50%; display: inline-block;"></span>
+                                Live
+                            </span>
+                        </div>
+                        <div class="chart-value-section">
+                            @php
+                                $currentStocks = $chartData['stocks'][6] ?? 0;
+                                $stocksChange = $currentStocks - ($chartData['stocks'][0] ?? 0);
+                                $stocksChangePercent = ($chartData['stocks'][0] ?? 0) > 0 ? (($stocksChange / ($chartData['stocks'][0] ?? 1)) * 100) : 0;
+                                $isStocksPositive = $stocksChange >= 0;
+                            @endphp
+                            <div class="chart-main-value">${{ number_format($currentStocks, 2) }}</div>
+                            <div class="chart-change {{ $isStocksPositive ? 'positive' : 'negative' }}">
+                                <span>{{ $isStocksPositive ? '↑' : '↓' }}</span>
+                                <span>${{ number_format(abs($stocksChange), 2) }} ({{ $isStocksPositive ? '+' : '' }}{{ number_format($stocksChangePercent, 2) }}%)</span>
+                            </div>
+                        </div>
+                        <div class="chart-metrics">
+                            <div class="chart-metric">
+                                <div class="chart-metric-label">Opening</div>
+                                <div class="chart-metric-value">${{ number_format($chartData['stocks'][0] ?? 0, 2) }}</div>
+                            </div>
+                            <div class="chart-metric">
+                                <div class="chart-metric-label">Current</div>
+                                <div class="chart-metric-value">${{ number_format(($chartData['stocks'][6] ?? ($chartData['stocks'][count($chartData['stocks'] ?? []) - 1] ?? 0)), 2) }}</div>
+                            </div>
+                            <div class="chart-metric">
+                                <div class="chart-metric-label">Low</div>
+                                <div class="chart-metric-value">${{ number_format((!empty($chartData['stocks']) ? min($chartData['stocks']) : 0), 2) }}</div>
+                            </div>
+                            <div class="chart-metric">
+                                <div class="chart-metric-label">High</div>
+                                <div class="chart-metric-value">${{ number_format((!empty($chartData['stocks']) ? max($chartData['stocks']) : 0), 2) }}</div>
+                            </div>
+                        </div>
+                        <div class="chart-period-selectors">
+                            <button class="chart-period-btn active" data-chart="stocks" data-period="7d">7D</button>
+                            <button class="chart-period-btn" data-chart="stocks" data-period="30d">30D</button>
+                            <button class="chart-period-btn" data-chart="stocks" data-period="90d">90D</button>
+                        </div>
+                        <div class="dashboard-chart-canvas-wrap">
+                            <canvas id="chartStocks"></canvas>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Quick actions -->
@@ -514,7 +563,8 @@
             'labels' => [],
             'balance' => [],
             'investments' => [],
-            'profit' => []
+            'profit' => [],
+            'stocks' => [],
         ];
         $chartDataForJs = $chartData ?? $defaultChartData;
     @endphp
@@ -523,6 +573,7 @@
     var balance = d.balance || [];
     var investments = d.investments || [];
     var profit = d.profit || [];
+    var stocks = d.stocks || [];
 
     function createGradient(ctx, color, opacity1, opacity2) {
         var gradient = ctx.createLinearGradient(0, 0, 0, 400);
@@ -615,6 +666,7 @@
         makeChart('chartBalance', balance, 'rgb(16, 185, 129)', 'Balance');
         makeChart('chartProfit', profit, 'rgb(227, 25, 55)', 'Profit');
         makeChart('chartInvestments', investments, 'rgb(37, 99, 235)', 'Investments');
+        makeChart('chartStocks', stocks, 'rgb(124, 58, 237)', 'Stocks');
     }
 
     // Period selector functionality

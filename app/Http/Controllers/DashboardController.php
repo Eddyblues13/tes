@@ -87,6 +87,7 @@ class DashboardController extends Controller
         $balanceData = [];
         $investmentsData = [];
         $profitData = [];
+        $stocksData = [];
         $baseProfit = max(0, (float) ($portfolioValue - $totalInvested));
         for ($i = 6; $i >= 0; $i--) {
             $date = now()->subDays($i);
@@ -112,9 +113,22 @@ class DashboardController extends Controller
             $profitDebits = $txUntil->where('type', 'profit_distribution')->where('direction', 'debit')->sum('amount');
             $bal = $dep - $wit - $inv - $profitDebits;
 
+            // Calculate stock holdings value up to this day
+            $stockPurchasesUntil = StockPurchase::where('user_id', $user?->id)
+                ->where('created_at', '<=', $endOfDay)
+                ->get();
+            $stockVal = 0;
+            foreach ($stockPurchasesUntil as $purchase) {
+                // To keep it simple, we use the purchase total_amount as the value, 
+                // or if we could fetch current stock price we would use it here. 
+                // Since this is historical, we'll use the amount spent as baseline value.
+                $stockVal += $purchase->total_amount;
+            }
+
             $balanceData[] = round($bal, 2);
             $investmentsData[] = round($inv, 2);
             $profitData[] = round($profit, 2);
+            $stocksData[] = round($stockVal, 2);
         }
 
         return view('user.dashboard', [
@@ -137,6 +151,7 @@ class DashboardController extends Controller
                 'balance' => $balanceData,
                 'investments' => $investmentsData,
                 'profit' => $profitData,
+                'stocks' => $stocksData,
             ],
         ]);
     }
