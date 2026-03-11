@@ -233,6 +233,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // KYC Management
         Route::get('/kyc', [AdminDashboardController::class, 'kycSubmissions'])->name('kyc');
         Route::post('/kyc/{kyc}/status', [AdminDashboardController::class, 'updateKycStatus'])->name('kyc.status');
+        Route::get('/kyc/file/{path}', [AdminDashboardController::class, 'serveKycFile'])->where('path', '.*')->name('kyc.file');
         
         // Support Tickets Management
         Route::get('/support', [AdminDashboardController::class, 'supportTickets'])->name('support');

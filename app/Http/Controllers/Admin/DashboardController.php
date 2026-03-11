@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use App\Mail\CustomMail;
 
 class DashboardController extends Controller
@@ -711,6 +712,23 @@ class DashboardController extends Controller
         ]);
 
         return back()->with('success', 'KYC status updated successfully.');
+    }
+
+    /**
+     * Serve KYC file from storage (bypasses symlink requirement for cPanel)
+     */
+    public function serveKycFile($path)
+    {
+        // Security: only allow files from the kyc/ directory
+        if (!str_starts_with($path, 'kyc/')) {
+            abort(404);
+        }
+
+        if (!Storage::disk('public')->exists($path)) {
+            abort(404);
+        }
+
+        return response()->file(Storage::disk('public')->path($path));
     }
 
     /**
